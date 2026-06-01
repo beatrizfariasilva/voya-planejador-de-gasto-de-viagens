@@ -1,7 +1,12 @@
 package com.voya.model;
 
 import jakarta.persistence.*;
+
+import java.util.List;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,4 +22,8 @@ public class Usuario {
     private String nome;
     private String email;
     private String senha;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "usuario")
+        private List<Viagem> viagens;
 }

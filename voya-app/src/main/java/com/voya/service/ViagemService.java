@@ -6,7 +6,9 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.voya.model.Usuario;
 import com.voya.model.Viagem;
+import com.voya.repository.UsuarioRepository;
 import com.voya.repository.ViagemRepository;
 
 @Service
@@ -14,13 +16,18 @@ public class ViagemService {
     
     @Autowired
     private ViagemRepository viagemRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-    public Viagem salvarViagem(Viagem viagem){
+    public Viagem salvarViagem(Viagem viagem, UUID usuarioId){
+        Usuario usuario=usuarioRepository.findById(usuarioId).orElseThrow();
+        viagem.setUsuario(usuario);
+        
         return viagemRepository.save(viagem);
     }
 
-    public List<Viagem> listarViagens(){
-        return viagemRepository.findAll();
+    public List<Viagem> listarViagensdoUsuario(UUID usuarioId){
+        return viagemRepository.findByUsuarioId(usuarioId);
     }
 
     public Viagem buscarPorId(UUID id){
@@ -32,7 +39,7 @@ public class ViagemService {
     }
 
     public Viagem atualizarViagem(UUID id, Viagem viagemAtualizada) {
-        Viagem viagemAatualizar=buscarPorId(id);
+        Viagem viagemAatualizar=viagemRepository.findById(id).orElseThrow(()->new RuntimeException("Viagem não encontrada"));
         viagemAatualizar.setDestino(viagemAtualizada.getDestino());
         viagemAatualizar.setDias(viagemAtualizada.getDias());
         viagemAatualizar.setPessoas(viagemAtualizada.getPessoas());

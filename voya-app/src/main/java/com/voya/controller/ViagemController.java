@@ -21,35 +21,35 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
-@RequestMapping("/api/viagem")
+@RequestMapping("/api/usuarios/{usuarioId}/viagens")
 public class ViagemController {
 
     @Autowired
     private ViagemService viagemService;
     
-    @PostMapping("/viagem/adicionar")
-    public Viagem criarViagem(@RequestBody Viagem viagem){
-        return viagemService.salvarViagem(viagem);
+    @PostMapping
+    public Viagem criarViagem(@RequestBody Viagem viagem, @PathVariable UUID usuarioId){
+        return viagemService.salvarViagem(viagem, usuarioId);
     }
 
-    @GetMapping("/viagem/listar")
-    public Iterable<Viagem> listar() {
-        return viagemService.listarViagens();
+    @GetMapping
+    public Iterable<Viagem> listar(@PathVariable UUID usuarioId) {
+        return viagemService.listarViagensdoUsuario(usuarioId);
     }
 
-    @GetMapping("/viagem/buscar/{id}")
-    public ResponseEntity<Viagem> buscarPorId(@PathVariable UUID id) {
-        return ResponseEntity.ok(viagemService.buscarPorId(id));
+    @GetMapping("/{viagemId}")
+    public ResponseEntity<Viagem> buscarPorId(@PathVariable UUID usuarioId, @PathVariable UUID viagemId) {
+        return ResponseEntity.ok(viagemService.buscarPorId(viagemId));
     }
 
-    @PatchMapping("viagem/atualizar/{id}")
-    public ResponseEntity<Viagem> atualizarViagem(@PathVariable UUID id, @RequestBody Viagem viagem) {
-        return ResponseEntity.ok(viagemService.atualizarViagem(id, viagem));
+    @PatchMapping("/{viagemId}")
+    public ResponseEntity<Viagem> atualizarViagem(@PathVariable UUID usuarioId, @PathVariable UUID viagemId, @RequestBody Viagem viagem) {
+        return ResponseEntity.ok(viagemService.atualizarViagem(viagemId, viagem));
     }
 
-    @DeleteMapping("viagem/deletar/{id}")
-    public ResponseEntity<Void> excluirViagem(@PathVariable UUID id) {
-        viagemService.excluirViagem(id);
+    @DeleteMapping("/{viagemId}")
+    public ResponseEntity<Void> excluirViagem(@PathVariable UUID usuarioId, @PathVariable UUID viagemId) {
+        viagemService.excluirViagem(viagemId);
         return ResponseEntity.noContent().build();
     }
 
