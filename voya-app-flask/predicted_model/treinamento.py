@@ -13,10 +13,16 @@ ARQUIVO_CSV = BASE_DIR / "content" / "dataset_ficticio.csv"
 
 ARQUIVO_MODELO = BASE_DIR / "content" / "modelo_viagens.pkl"
 ARQUIVO_COLUNAS = BASE_DIR / "content" / "colunas_modelo.pkl"
+ARQUIVO_DESTINO = BASE_DIR / "content" / "destinos_modelo.pkl"
 
 def carregar_dados():
 
     dados = pd.read_csv(ARQUIVO_CSV)
+
+    # Validação de destinos treinados
+    joblib.dump(
+    sorted(dados["Destino"].unique()),
+    ARQUIVO_DESTINO)
 
     dados = pd.get_dummies(
         dados,
