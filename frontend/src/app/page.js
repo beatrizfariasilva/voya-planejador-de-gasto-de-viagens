@@ -1,5 +1,9 @@
+import Dashboard from "../paginas/Dashbord";
+
 export default function Home() {
   return (
-    <div></div>
+    <div>
+      <Dashboard />
+    </div>
   );
 }
