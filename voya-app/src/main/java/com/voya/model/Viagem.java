@@ -18,10 +18,10 @@ public class Viagem {
     private String destino;
     private int dias;
     private int pessoas;
-    private String hospedagem;
-    private String passeios;
-    private String vidaNoturna;
-    private String alimentacao;
+    private int hospedagem;
+    private int passeios;
+    private int vidaNoturna;
+    private int alimentacao;
     private double custoEstimado;
 
     @ManyToOne
