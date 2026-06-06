@@ -1,0 +1,22 @@
+.cabecalho1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  padding: 32px 32px 24px 32px;
+  box-sizing: border-box;
+}
+
+.nomeUsuario {
+  font-size: 23px;
+  font-weight: 500px;
+  color: #1D2939;
+  margin: 0;
+}
+
+.textinho {
+  font-size: 13px;
+  color: #667085;
+  margin-top: 0px;
+  margin-bottom: 0;
+}
