@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.ResponseEntity;
 
+import com.voya.dto.UserRequestDTO;
+import com.voya.dto.UserResponseDTO;
 import com.voya.model.Usuario;
 import com.voya.service.UsuarioService;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +36,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/adicionar")
-    public Usuario criarUsuario(@RequestBody Usuario usuario) {
+    public UserResponseDTO criarUsuario(@RequestBody UserRequestDTO usuario) {
         return userService.novoUsuario(usuario);
     }
 

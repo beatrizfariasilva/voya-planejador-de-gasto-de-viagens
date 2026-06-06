@@ -3,8 +3,8 @@ package com.voya.controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
 
-import com.voya.dto.PrevisaoRequest;
-import com.voya.dto.PrevisaoResponse;
+import com.voya.dto.PrevisaoRequestDTO;
+import com.voya.dto.PrevisaoResponseDTO;
 import com.voya.model.Viagem;
 import com.voya.service.ViagemService;
 
@@ -55,9 +55,9 @@ public class ViagemController {
 
     private final RestClient restClient=RestClient.create("http://localhost:8000");
     @PostMapping("/{viagemId}/prever")
-    public PrevisaoResponse obterPrevisao(@PathVariable UUID usuarioId, @PathVariable UUID viagemId, @RequestBody PrevisaoRequest dados) {
+    public PrevisaoResponseDTO obterPrevisao(@PathVariable UUID usuarioId, @PathVariable UUID viagemId, @RequestBody PrevisaoRequestDTO dados) {
         Viagem viagem=viagemService.buscarPorId(viagemId);
-        PrevisaoResponse resposta= restClient.post().uri("/prever").body(dados).retrieve().body(PrevisaoResponse.class);
+        PrevisaoResponseDTO resposta= restClient.post().uri("/prever").body(dados).retrieve().body(PrevisaoResponseDTO.class);
         viagem.setCustoEstimado(resposta.previsao());
         viagemService.salvarViagem(viagem, usuarioId);
         return resposta;
