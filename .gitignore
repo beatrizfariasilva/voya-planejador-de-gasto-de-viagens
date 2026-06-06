@@ -6,6 +6,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.pkl
+*.pyc
 
 # ======================================
 # Ambiente virtual
@@ -67,14 +68,6 @@ htmlcov/
 build/
 dist/
 *.egg-info/
-
-# ======================================
-# Modelos de Machine Learning
-# ======================================
-# Descomente se NÃO quiser versionar modelos
-
-# *.pkl
-# *.joblib
 
 # ======================================
 # Arquivos temporários

@@ -1,6 +1,10 @@
 package com.voya.controller;
 
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClient;
+
+import com.voya.dto.PrevisaoRequestDTO;
+import com.voya.dto.PrevisaoResponseDTO;
 import com.voya.model.Viagem;
 import com.voya.service.ViagemService;
 
@@ -15,9 +19,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
-
-
 
 @RestController
 @RequestMapping("/api/usuarios/{usuarioId}/viagens")
@@ -50,6 +51,16 @@ public class ViagemController {
     public ResponseEntity<Void> excluirViagem(@PathVariable UUID usuarioId, @PathVariable UUID viagemId) {
         viagemService.excluirViagem(viagemId);
         return ResponseEntity.noContent().build();
+    }
+
+    private final RestClient restClient=RestClient.create("http://localhost:8000");
+    @PostMapping("/{viagemId}/prever")
+    public PrevisaoResponseDTO obterPrevisao(@PathVariable UUID usuarioId, @PathVariable UUID viagemId, @RequestBody PrevisaoRequestDTO dados) {
+        Viagem viagem=viagemService.buscarPorId(viagemId);
+        PrevisaoResponseDTO resposta= restClient.post().uri("/prever").body(dados).retrieve().body(PrevisaoResponseDTO.class);
+        viagem.setCustoEstimado(resposta.previsao());
+        viagemService.salvarViagem(viagem, usuarioId);
+        return resposta;
     }
 
 }

@@ -21,19 +21,13 @@ def health():
         "model_loaded": True
     }
 
-@app.post("/predict")
-def predict(dados: ViagemRequest):
-    previsao = modelo.prever(dados.model_dump())
-    if dados.Destino not in modelo.destinos_validos:
+@app.post("/prever")
+def prever(dados: ViagemRequest):
+    try:
+        predicao = modelo.prever(dados.model_dump())
+        return ({"previsao" : predicao})
+    except Exception as e:
         raise HTTPException(
             status_code=400,
-            detail={
-                "message": "Destino não suportado.",
-                "destinos_disponiveis": modelo.destinos_validos
-            }
+            detail=str(e)
         )
-
-    return {
-        "success": True,
-        "Valor Previsto": previsao
-    }

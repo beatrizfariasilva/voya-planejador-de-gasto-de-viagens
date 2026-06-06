@@ -6,6 +6,9 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import exception.UsuarioNaoEncontradoException;
+
+import com.voya.dto.UserRequestDTO;
+import com.voya.dto.UserResponseDTO;
 import com.voya.model.Usuario;
 import com.voya.repository.UsuarioRepository;
 
@@ -19,14 +22,17 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    public Usuario novoUsuario(Usuario usuario) {
+    public UserResponseDTO novoUsuario(UserRequestDTO usuario) {
 
         Usuario novoUsuario = new Usuario();
         novoUsuario.setNome(usuario.getNome());
         novoUsuario.setEmail(usuario.getEmail());
         novoUsuario.setSenha(usuario.getSenha());
 
-        return usuarioRepository.save(novoUsuario);
+        Usuario usuarioSalvo = usuarioRepository.save(novoUsuario); 
+        UserResponseDTO response = new UserResponseDTO(usuarioSalvo.getId(),usuarioSalvo.getNome(),usuarioSalvo.getEmail());
+
+        return response;
     }
 
     public Usuario buscarUsuarioPorId(UUID id) {
