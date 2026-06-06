@@ -4,9 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { login } from "../../services/authService";
 import "./Login.css";
+import { useAuthStore } from "../../store/authStore";
 
 function Login() {
   const router = useRouter();
+  const loginStore = useAuthStore((state) => state.login);
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -21,6 +23,14 @@ function Login() {
 
       console.log("Usuário logado:", data);
 
+      loginStore(
+        {
+          id: data.id,
+          nome: data.nome,
+          email: data.email,
+        },
+        data.token
+      );
       router.push("/dashboard");
 
     } catch (error) {
@@ -100,11 +110,11 @@ function Login() {
               Criar conta
             </a>
           </div>
-             <div className="forgot-password">
-              <a href="/recuperarsenha">
-                Esqueceu sua senha?
-              </a>
-            </div>
+          <div className="forgot-password">
+            <a href="/recuperarsenha">
+              Esqueceu sua senha?
+            </a>
+          </div>
         </div>
       </div>
     </div>

@@ -2,10 +2,12 @@
 import React from 'react';
 import {ChevronUp} from 'lucide-react';
 import './Footer.css';
+import { useAuthStore } from "../../store/authStore";
 
 function Footer() {
 
-    const [usuario, setUsuario] = React.useState("Usuario");
+    const usuario = useAuthStore((state) => state.usuario)?.nome || "Usuario";
+
     const inicial = usuario ? usuario.charAt(0) : 'U';
     const [menuAberto, setMenuAberto] = React.useState(false);
 
