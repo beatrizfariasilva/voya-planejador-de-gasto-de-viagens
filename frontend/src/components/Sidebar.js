@@ -1,28 +1,40 @@
-import "./Sidebar.css";
 import {
   PlusCircle,
   Clock3,
-  User,
-  ChevronDown
+  User
 } from "lucide-react";
 
-function Sidebar() {
-  return (
-    <div className="sidebar">
-      <img src="logo.png" alt="voya" className="logo"/>
-      <div className="menu">
-        <div className="item"> <PlusCircle size={18} /> Nova previsão</div>
-        <div div className="item"> <Clock3 size={18} /> Histórico</div>
-        <div div className="item"> <User size={18} /> Perfil</div>
-      </div>
+import "./Sidebar.css";
 
-      <div className="perfil">
-        <span className="nome">Usuario</span>
-        <ChevronDown size={16}/>
-      </div>
-      
-    </div>
+export default function Sidebar() {
+  return (
+    <aside className="sidebar">
+
+      <img
+        src="/logo.png"
+        alt="Voya"
+        className="logo"
+      />
+
+      <nav className="menu">
+
+        <button className="menu-item active">
+          <PlusCircle size={18}/>
+          Nova previsão
+        </button>
+
+        <button className="menu-item">
+          <Clock3 size={18}/>
+          Histórico
+        </button>
+
+        <button className="menu-item">
+          <User size={18}/>
+          Perfil
+        </button>
+
+      </nav>
+
+    </aside>
   );
 }
-
-export default Sidebar;

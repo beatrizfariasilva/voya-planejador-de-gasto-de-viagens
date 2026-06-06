@@ -1,49 +1,57 @@
 .sidebar {
-  width: 250px;
-  height: 100vh;
+  width: 240px;
+  padding: 32px 24px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 20px;
 
-  background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url("/sidebar.png");
+  background:
+    linear-gradient(
+      rgba(255,255,255,.85),
+      rgba(255,255,255,.85)
+    ),
+    url('/sidebar.png');
+
   background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
 }
 
 .logo {
-  width: 250px;
-  display: block; 
-  margin-left: -50px;
-  margin-top: -15px;
+  width: 180px;
+  margin-bottom: 48px;
 }
 
 .menu {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 20px;
+  gap: 8px;
 }
 
-.item {
+.menu-item {
+  height: 48px;
+
   display: flex;
   align-items: center;
   gap: 12px;
+
+  border: none;
+  background: transparent;
+
+  color: #344054;
+
+  border-radius: 12px;
+
+  padding: 0 16px;
+
   cursor: pointer;
+
+  transition: .2s;
 }
 
-.perfil {
-    margin-top: auto;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 20px;
+.menu-item:hover {
+  background: rgba(12,120,125,.06);
 }
 
-.nome {
-  flex: 1;
-  font-size: 14px;
-  font-weight: 500;
-  color: #374151;
+.menu-item.active {
+  background: rgba(12,120,125,.10);
+  color: #0C787D;
+  font-weight: 600;
 }
