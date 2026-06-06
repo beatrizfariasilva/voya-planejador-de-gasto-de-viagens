@@ -1,0 +1,193 @@
+.card-resumo {
+  background: #ffffff;
+  border: 1px solid #F2F4F7;
+  border-radius: 24px;
+  width: 100%;
+  height: auto;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.02);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.resumo-topo {
+  position: static;
+  padding: 24px;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.8) 45%, rgba(255, 255, 255, 0.2)), url('/sidebar.png');
+  background-size: cover;
+  background-position: left;
+  background-repeat: no-repeat;
+  border-bottom: 1px solid #F2F4F7;
+}
+
+.badge-custo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(12, 120, 125, 0.06);
+  color: #0C787D;
+  padding: 6px 12px;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.valor-total {
+  font-size: 40px;
+  font-weight: 800;
+  color: #0C787D;
+  margin: 10px 0 12px 0;
+}
+
+.faixa-preco {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #E6F4F4;
+  border: 1px solid #B2DDDD;
+  padding: 8px 16px;
+  border-radius: 12px;
+  color: #0E6266;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.resumo-categorias {
+  padding: 24px 32px;
+}
+
+.resumo-categorias h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #101828;
+  margin-bottom: 20px;
+}
+
+.lista-categorias {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.linha-categoria {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.cat-info-esquerda {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 120px;
+}
+
+.cat-icone {
+  color: #0C787D;
+  display: flex;
+  align-items: center;
+}
+
+.cat-nome {
+  font-size: 13px;
+  font-weight: 600;
+  color: #344054;
+}
+
+.cat-barra-container {
+  flex: 1;
+  height: 8px;
+  background: #F2F4F7;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.cat-barra-progresso {
+  height: 100%;
+  background: #0C787D;
+  border-radius: 4px;
+}
+
+.cat-valores {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 90px;
+  justify-content: space-between;
+}
+
+.cat-porcentagem {
+  font-size: 12px;
+  color: #667085;
+  font-weight: 500;
+}
+
+.cat-valor-moeda {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1D2939;
+}
+
+.resumo-rodape {
+  padding: 0 32px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: auto;
+}
+
+.comparativo-card {
+  background: #F9FAFB;
+  border: 1px solid #EAECF0;
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+}
+
+.comparativo-grafico-icone {
+  font-size: 20px;
+}
+
+.comparativo-texto h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #344054;
+  margin: 0 0 2px 0;
+}
+
+.comparativo-texto p {
+  font-size: 12px;
+  color: #667085;
+  margin: 0;
+}
+
+.seta-comparativo {
+  margin-left: auto;
+  color: #475467;
+}
+
+.btn-salvar-previsao {
+  height: 40px;
+  background: #ffffff;
+  color: #0C787D;
+  border: 1px solid #0C787D;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-salvar-previsao:hover {
+  background: rgba(12, 120, 125, 0.04);
+}
