@@ -1,9 +1,9 @@
-import Dashboard from "../paginas/Dashbord";
+import Login from "../paginas/Login/Login";
 
 export default function Home() {
   return (
     <div>
-      <Dashboard />
+      <Login />
     </div>
   );
 }

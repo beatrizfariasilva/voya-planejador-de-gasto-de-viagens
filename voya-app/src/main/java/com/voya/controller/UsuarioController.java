@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.ResponseEntity;
 
+import com.voya.dto.RecuperarSenhaDTO;
 import com.voya.dto.UserRequestDTO;
 import com.voya.dto.UserResponseDTO;
 import com.voya.model.Usuario;
@@ -53,5 +54,26 @@ public class UsuarioController {
     public ResponseEntity<Void> deletarUsuario(@PathVariable UUID id) {
         userService.deletarUsuario(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/validar-email/{email}")
+    public ResponseEntity<String> validarEmail(
+            @PathVariable String email) {
+
+        userService.validarEmail(email);
+
+        return ResponseEntity.ok("Email encontrado");
+    }
+
+    @PatchMapping("/recuperar-senha")
+    public ResponseEntity<String> recuperarSenha(
+            @RequestBody RecuperarSenhaDTO request) {
+
+        userService.recuperarSenha(
+                request.getEmail(),
+                request.getSenha());
+
+        return ResponseEntity.ok(
+                "Senha alterada com sucesso.");
     }
 }

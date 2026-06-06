@@ -1,4 +1,4 @@
-package exception;
+package com.voya.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +14,15 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(UsuarioJaExisteException.class)
+    public ResponseEntity<String> tratarUsuarioJaExiste(
+            UsuarioJaExisteException ex) {
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
                 .body(ex.getMessage());
     }
 }
