@@ -6,6 +6,7 @@ import { login } from "../../services/authService";
 import "./Login.css";
 import { useAuthStore } from "../../store/authStore";
 import Avioes from "../../components/Avioes/Avioes";
+import { Alert } from "../../components/Alertas/Alertas";
 
 function Login() {
   const router = useRouter();
@@ -19,7 +20,7 @@ function Login() {
 
     try {
       const data = await login(email, senha);
-      
+
       loginStore(
         {
           id: data.id,
@@ -31,7 +32,7 @@ function Login() {
       router.push("/dashboard");
 
     } catch (error) {
-      alert(error.message);
+      Alert.error(error.message);
     }
   }
 

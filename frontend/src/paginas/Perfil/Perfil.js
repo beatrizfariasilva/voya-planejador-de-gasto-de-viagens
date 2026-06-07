@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Footer from "../../components/Footer/Footer";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -7,21 +7,51 @@ import { User, Mail, Save, Lock } from 'lucide-react';
 import { useAuthStore } from "../../store/authStore";
 import { useRouter } from 'next/navigation';
 import './Perfil.css';
+import { Alert } from "../../components/Alertas/Alertas";
 
 export default function Perfil() {
     const usuarioLogado = useAuthStore((state) => state.usuario);
     const setUsuario = useAuthStore((state) => state.setUsuario);
-    const [formData, setFormData] = useState({ 
-        nome: '', 
-        email: '', 
-        senha: '' 
+    const [formData, setFormData] = useState({
+        nome: '',
+        email: '',
+        senha: ''
     });
+
+    useEffect(() => {
+        if (usuarioLogado) {
+            setFormData({
+                nome: usuarioLogado.nome || '',
+                email: usuarioLogado.email || '',
+                senha: ''
+            });
+        }
+    }, [usuarioLogado]);
 
     const handleSalvar = async (e) => {
         e.preventDefault();
 
+        if (!formData.nome.trim()) {
+            Alert.error(
+                "Nome não informado",
+                "Por favor, informe seu nome para prosseguir."
+            );
+            return;
+        }
+
+        if (!formData.email.trim()) {
+            Alert.error(
+                "Confirmação necessária",
+                "Digite seu e-mail para prosseguir com as alterações."
+            );
+            return;
+        }
+
         if (!formData.senha.trim()) {
-            alert("Por favor, defina uma senha para confirmar as alterações.");
+            Alert.error(
+                "Confirmação necessária",
+                "Digite sua senha para salvar as alterações realizadas."
+            );
             return;
         }
 
@@ -33,21 +63,28 @@ export default function Perfil() {
             });
 
             if (response.ok) {
-                const usuarioAtualizado=await response.json();
+                const usuarioAtualizado = await response.json();
                 setUsuario(usuarioAtualizado);
-                alert("Perfil atualizado com sucesso!");
+                Alert.success(
+                    "Perfil atualizado com sucesso!",
+                    "Suas informações foram salvas com êxito."
+                );
+
                 setFormData(prev => ({ ...prev, senha: '' }));
             } else {
-                alert("Erro ao atualizar perfil.");
+                Alert.error(
+                    "Não foi possível atualizar o perfil.",
+                    "Ocorreu um erro ao salvar suas informações. Tente novamente."
+                );
             }
         } catch (error) {
             console.error("Erro na requisição:", error);
-            alert("Erro de conexão com o servidor.");
+            Alert.error("Erro de conexão com o servidor.");
         }
     };
 
     const logout = useAuthStore((state) => state.logout);
-    const router=useRouter();
+    const router = useRouter();
 
     const handleExcluirConta = async () => {
         const confirmacao = window.confirm("Tem certeza que deseja excluir sua conta? Essa ação é irreversível.");
@@ -58,11 +95,17 @@ export default function Perfil() {
                 });
 
                 if (response.ok) {
-                    alert("Conta excluída com sucesso.");
+                    Alert.success(
+                        "Conta excluída com sucesso.",
+                        "Sua conta foi removida. Esperamos poder recebê-la novamente no futuro."
+                    );
                     logout();
-                    router.push('/login'); 
+                    router.push('/login');
                 } else {
-                    alert("Erro ao excluir a conta.");
+                    Alert.error(
+                        "Não foi possível excluir a conta.",
+                        "Ocorreu um erro ao processar sua solicitação. Tente novamente."
+                    );
                 }
             } catch (error) {
                 console.error("Erro na requisição:", error);
@@ -90,40 +133,40 @@ export default function Perfil() {
                                         </div>
                                         <div>
                                             <h4>{usuarioLogado?.nome || "Usuário"}</h4>
-                                            <span>{usuarioLogado?.email }</span>
+                                            <span>{usuarioLogado?.email}</span>
                                         </div>
                                     </div>
 
                                     <div className="form-grid">
                                         <div className="input-group">
-                                            <label><User size={16}/> Novo nome </label>
-                                            <input 
+                                            <label><User size={16} /> Novo nome </label>
+                                            <input
                                                 type="text"
-                                                autoComplete="off" 
+                                                autoComplete="off"
                                                 value={formData.nome}
-                                                onChange={(e) => setFormData({...formData, nome: e.target.value})}
+                                                onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
                                                 placeholder="Digite o novo nome"
                                             />
                                         </div>
 
                                         <div className="input-group">
-                                            <label><Mail size={16}/> Novo e-mail </label>
-                                            <input 
+                                            <label><Mail size={16} /> Novo e-mail </label>
+                                            <input
                                                 type="email"
-                                                autoComplete="off" 
+                                                autoComplete="off"
                                                 value={formData.email}
-                                                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                                 placeholder="Digite o novo e-mail"
                                             />
                                         </div>
 
                                         <div className="input-group">
-                                            <label><Lock size={16}/> Nova senha</label>
-                                            <input 
+                                            <label><Lock size={16} /> Nova senha</label>
+                                            <input
                                                 type="password"
-                                                autoComplete="off" 
+                                                autoComplete="off"
                                                 value={formData.senha || ''}
-                                                onChange={(e) => setFormData({...formData, senha: e.target.value})}
+                                                onChange={(e) => setFormData({ ...formData, senha: e.target.value })}
                                                 placeholder="Defina uma nova senha"
                                             />
                                         </div>

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { recuperarSenha, validarEmail } from "../../services/recuperarSenhaService";
 import "../Login/Login.css";
 import Avioes from "../../components/Avioes/Avioes";
+import { Alert } from "../../components/Alertas/Alertas";
 
 function RecuperarSenha() {
   const router = useRouter();
@@ -19,7 +20,10 @@ function RecuperarSenha() {
 
       setEmailValidado(true);
 
-      alert("E-mail encontrado!");
+      Alert.success(
+        "Conta encontrada!",
+        "Tudo certo! Agora defina uma nova senha para acessar sua conta."
+      );
 
     } catch (error) {
       alert(error.message);
@@ -32,12 +36,15 @@ function RecuperarSenha() {
     try {
       await recuperarSenha(email, novaSenha);
 
-      alert("Senha alterada com sucesso!");
+      Alert.success(
+        "Senha atualizada!",
+        "Sua nova senha foi salva com sucesso. Faça login para continuar."
+      );
 
       router.push("/login");
 
     } catch (error) {
-      alert(error.message);
+      Alert.error(error.message);
     }
   }
 

@@ -1,4 +1,4 @@
-'use client'; 
+'use client';
 import React, { useEffect, useState } from 'react';
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Footer from "../../components/Footer/Footer";
@@ -6,6 +6,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import { MapPin, Trash2, Edit3, Search } from 'lucide-react';
 import { useAuthStore } from "../../store/authStore";
 import './Historico.css';
+import { Alert } from "../../components/Alertas/Alertas";
 
 export default function Historico() {
     const [viagens, setViagens] = useState([]);
@@ -31,27 +32,39 @@ export default function Historico() {
     }, [usuarioLogado]);
 
     const excluirViagem = async (id) => {
-        if (window.confirm("Deseja realmente excluir esta viagem?")) {
+        const result = await Alert.confirm(
+            "Excluir viagem?",
+            "Esta ação não poderá ser desfeita."
+        );
+        if (result.isConfirmed) {
             try {
                 const response = await fetch(`http://localhost:8080/api/usuarios/${usuarioLogado.id}/viagens/${id}`, {
                     method: 'DELETE'
                 });
                 if (response.ok) {
                     setViagens(viagens.filter(v => v.id !== id));
+                    Alert.success(
+                        "Viagem excluída!",
+                        "A viagem foi removida com sucesso."
+                    );
                 }
             } catch (error) {
-                console.error("Erro ao excluir:", error);
+                console.log(error);
+                Alert.error(
+                    "Erro ao excluir viagem.",
+                    "Não foi possível concluir a operação."
+                );
             }
         }
     };
 
-    const viagensFiltradas = viagens.filter(v => 
+    const viagensFiltradas = viagens.filter(v =>
         v.destino.toLowerCase().includes(busca.toLowerCase())
     );
 
     const prepararEdicao = (viagem) => {
-        setViagemParaEditar({ ...viagem }); 
-        setIsModalAberto(true);             
+        setViagemParaEditar({ ...viagem });
+        setIsModalAberto(true);
     };
 
     const salvarEdicao = async (e) => {
@@ -76,7 +89,7 @@ export default function Historico() {
         <ProtectedRoute>
             <div className="dashboard-page">
                 <div className="dashboard-container">
-                    
+
                     <Sidebar />
 
                     <div className="main-content">
@@ -86,7 +99,7 @@ export default function Historico() {
                                     <h2>Meu Histórico</h2>
                                     <div className="busca-container">
                                         <Search size={18} />
-                                        <input type="text" placeholder="Procurar viagem..."  value={busca} onChange={(e) => setBusca(e.target.value)} />
+                                        <input type="text" placeholder="Procurar viagem..." value={busca} onChange={(e) => setBusca(e.target.value)} />
                                     </div>
                                 </header>
 
@@ -97,10 +110,10 @@ export default function Historico() {
                                                 <MapPin size={20} className="icon-destino" />
                                                 <div>
                                                     <h3>{v.destino}</h3>
-                                                <span className="mini-resumo">
-                                                    Hospedagem: {v.hospedagem === 1 ? 'Econômica' : v.hospedagem === 3 ? 'Luxo' : 'Conforto'} | 
-                                                    Alimentação: {v.alimentacao === 1 ? 'Básica' : v.alimentacao === 3 ? 'Premium' : 'Padrão'}
-                                                </span>
+                                                    <span className="mini-resumo">
+                                                        Hospedagem: {v.hospedagem === 1 ? 'Econômica' : v.hospedagem === 3 ? 'Luxo' : 'Conforto'} |
+                                                        Alimentação: {v.alimentacao === 1 ? 'Básica' : v.alimentacao === 3 ? 'Premium' : 'Padrão'}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="viagem-valor">
@@ -119,22 +132,22 @@ export default function Historico() {
                 </div>
                 <Footer />
                 {isModalAberto && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <h3>Editar destino</h3>
-                        <input 
-                            type="text" 
-                            value={viagemParaEditar.destino}
-                            onChange={(e) => setViagemParaEditar({...viagemParaEditar, destino: e.target.value})}
-                            className="input-edicao-destino" 
-                        />
-                        <div className="modal-actions">
-                            <button onClick={() => setIsModalAberto(false)} className="btn-save">Cancelar</button>
-                            <button onClick={salvarEdicao} className="btn-save">Salvar</button>
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <h3>Editar destino</h3>
+                            <input
+                                type="text"
+                                value={viagemParaEditar.destino}
+                                onChange={(e) => setViagemParaEditar({ ...viagemParaEditar, destino: e.target.value })}
+                                className="input-edicao-destino"
+                            />
+                            <div className="modal-actions">
+                                <button onClick={() => setIsModalAberto(false)} className="btn-save">Cancelar</button>
+                                <button onClick={salvarEdicao} className="btn-save">Salvar</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
             </div>
         </ProtectedRoute>
     );
