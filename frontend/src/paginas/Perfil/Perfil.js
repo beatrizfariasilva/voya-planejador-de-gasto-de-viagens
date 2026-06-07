@@ -6,29 +6,25 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import { User, Mail, Save, Lock } from 'lucide-react';
 import { useAuthStore } from "../../store/authStore";
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import './Perfil.css';
 
 export default function Perfil() {
     const usuarioLogado = useAuthStore((state) => state.usuario);
     const setUsuario = useAuthStore((state) => state.setUsuario);
-    const [formData, setFormData] = useState({
-        nome: usuarioLogado?.nome || '',
-        email: usuarioLogado?.email || '',
-        senha: ''
+    const [formData, setFormData] = useState({ 
+        nome: '', 
+        email: '', 
+        senha: '' 
     });
 
-    useEffect(() => {
-        if (usuarioLogado) {
-            setFormData({
-                nome: usuarioLogado.nome || '',
-                email: usuarioLogado.email || '',
-                senha: '' 
-            });
-        }
-    }, [usuarioLogado]);
-
     const handleSalvar = async (e) => {
+        e.preventDefault();
+
+        if (!formData.senha.trim()) {
+            alert("Por favor, defina uma senha para confirmar as alterações.");
+            return;
+        }
+
         try {
             const response = await fetch(`http://localhost:8080/api/usuarios/atualizar/${usuarioLogado.id}`, {
                 method: 'PATCH',
@@ -40,11 +36,13 @@ export default function Perfil() {
                 const usuarioAtualizado=await response.json();
                 setUsuario(usuarioAtualizado);
                 alert("Perfil atualizado com sucesso!");
+                setFormData(prev => ({ ...prev, senha: '' }));
             } else {
                 alert("Erro ao atualizar perfil.");
             }
         } catch (error) {
             console.error("Erro na requisição:", error);
+            alert("Erro de conexão com o servidor.");
         }
     };
 
@@ -100,34 +98,40 @@ export default function Perfil() {
                                         <div className="input-group">
                                             <label><User size={16}/> Novo nome </label>
                                             <input 
-                                                type="text" 
+                                                type="text"
+                                                autoComplete="off" 
                                                 value={formData.nome}
                                                 onChange={(e) => setFormData({...formData, nome: e.target.value})}
+                                                placeholder="Digite o novo nome"
                                             />
                                         </div>
 
                                         <div className="input-group">
-                                            <label><Mail size={16}/> Novo e-mail</label>
+                                            <label><Mail size={16}/> Novo e-mail </label>
                                             <input 
-                                                type="email" 
+                                                type="email"
+                                                autoComplete="off" 
                                                 value={formData.email}
                                                 onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                                placeholder="Digite o novo e-mail"
                                             />
                                         </div>
 
                                         <div className="input-group">
                                             <label><Lock size={16}/> Nova senha</label>
                                             <input 
-                                                type="password" 
+                                                type="password"
+                                                autoComplete="off" 
                                                 value={formData.senha || ''}
                                                 onChange={(e) => setFormData({...formData, senha: e.target.value})}
+                                                placeholder="Defina uma nova senha"
                                             />
                                         </div>
                                     </div>
 
                                     <div className="perfil-actions">
                                         <button type="submit" className="btn-salvar-perfil">
-                                            <Save size={18} /> Salvar Alterações
+                                            <Save size={18} /> Salvar alterações
                                         </button>
                                     </div>
                                 </form>
