@@ -6,24 +6,23 @@ export const useAuthStore = create(
     (set) => ({
       usuario: null,
       token: null,
-      isAuthenticated: false,
+      hydrated: false,
 
       login: (usuario, token) =>
-        set({
-          usuario,
-          token,
-          isAuthenticated: true,
-        }),
+        set({ usuario, token }),
 
       logout: () =>
         set({
           usuario: null,
           token: null,
-          isAuthenticated: false,
         }),
     }),
     {
       name: "auth-storage",
+
+      onRehydrateStorage: () => (state) => {
+        state.hydrated = true;
+      },
     }
   )
 );

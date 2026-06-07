@@ -1,25 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/authStore";
 
 export default function ProtectedRoute({ children }) {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
+
+  const token = useAuthStore((state) => state.token);
+  const hydrated = useAuthStore((state) => state.hydrated);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    if (!hydrated) return;
 
     if (!token) {
       router.push("/login");
-      return;
     }
+  }, [token, hydrated, router]);
 
-    setLoading(false);
-  }, [router]);
-
-  if (loading) {
+  if (!hydrated) {
     return <p>Carregando...</p>;
+  }
+
+  if (!token) {
+    return null;
   }
 
   return children;

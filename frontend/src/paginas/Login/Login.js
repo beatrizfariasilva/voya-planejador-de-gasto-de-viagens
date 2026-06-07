@@ -19,11 +19,7 @@ function Login() {
 
     try {
       const data = await login(email, senha);
-
-      localStorage.setItem("token", data.token);
-
-      console.log("Usuário logado:", data);
-
+      
       loginStore(
         {
           id: data.id,
