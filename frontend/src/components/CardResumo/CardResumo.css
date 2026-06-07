@@ -14,7 +14,7 @@
 .resumo-topo {
   position: static;
   padding: 24px;
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.8) 45%, rgba(255, 255, 255, 0.2)), url('/tentativa2.png');
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.85) 45%, rgba(255, 255, 255, 0.5)), url('/tentativa2.png');
   background-size: cover;
   background-position: left;
   background-repeat: no-repeat;

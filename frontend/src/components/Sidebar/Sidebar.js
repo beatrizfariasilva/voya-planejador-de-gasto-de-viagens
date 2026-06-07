@@ -1,9 +1,6 @@
-import {
-  PlusCircle,
-  Clock3,
-  User
-} from "lucide-react";
-
+'use client';
+import Link from 'next/link';
+import {PlusCircle, Clock3, User} from "lucide-react";
 import "./Sidebar.css";
 
 export default function Sidebar() {
@@ -18,20 +15,20 @@ export default function Sidebar() {
 
       <nav className="menu">
 
-        <button className="menu-item active">
+        <Link href="/dashboard" className="menu-item active">
           <PlusCircle size={18}/>
-          Nova previsão
-        </button>
+          <span>Nova previsão</span>
+        </Link>
 
-        <button className="menu-item">
+        <Link href="/dashboard/historico" className="menu-item">
           <Clock3 size={18}/>
-          Histórico
-        </button>
+          <span>Histórico</span>
+        </Link>
 
-        <button className="menu-item">
+        <Link href="/dashboard/perfil" className="menu-item">
           <User size={18}/>
-          Perfil
-        </button>
+          <span>Perfil</span>
+        </Link>
 
       </nav>
 

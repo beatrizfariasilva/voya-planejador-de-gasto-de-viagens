@@ -26,7 +26,7 @@
 }
 
 .menu-item {
-  height: 48px;
+  height: 45px;
 
   display: flex;
   align-items: center;
@@ -53,5 +53,4 @@
 .menu-item.active {
   background: rgba(12,120,125,.10);
   color: #0C787D;
-  font-weight: 600;
 }

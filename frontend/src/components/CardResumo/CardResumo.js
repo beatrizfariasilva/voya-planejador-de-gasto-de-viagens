@@ -9,8 +9,8 @@ export default function CardResumo({ dadosResultado }) {
   const custoPorDia = valorTotal/escolhas.dias;
   const custoPorPessoa = valorTotal/escolhas.pessoas;
 
-  const faixaMin = valorTotal * 0.85;
-  const faixaMax = valorTotal * 1.15;
+  const faixaMin = Math.round(valorTotal*0.85);
+  const faixaMax = Math.round(valorTotal*1.15);
 
   const pesosBase = { hospedagem: 14, passeios: 7, alimentacao: 5, vidaNoturna: 4 };
   const pontosHosp = escolhas.hospedagem * pesosBase.hospedagem;
@@ -61,29 +61,29 @@ export default function CardResumo({ dadosResultado }) {
             </div>
 
             <div className="resumo-categorias">
-    <h3>Gasto por categoria</h3>
-    
-          <div className="lista-categorias">
-            {categorias.map((cat, index) => (
-              <div key={index} className="linha-categoria">
-                <div className="cat-info-esquerda">
-                  <span className="cat-icone">{cat.icone}</span>
-                  <span className="cat-nome">{cat.nome}</span>
-                </div>
-                
-                <div className="cat-barra-container">
-                  <div className="cat-barra-progresso" style={{ width: `${cat.porcentagem}%` }}></div>
-                </div>
-                
-                <div className="cat-valores">
-                  <span className="cat-porcentagem">{cat.porcentagem}%</span>
-                  <span className="cat-valor-moeda">R$ {cat.valor}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+              <h3>Gasto por categoria</h3>
+              
+                    <div className="lista-categorias">
+                      {categorias.map((cat, index) => (
+                        <div key={index} className="linha-categoria">
+                          <div className="cat-info-esquerda">
+                            <span className="cat-icone">{cat.icone}</span>
+                            <span className="cat-nome">{cat.nome}</span>
+                          </div>
+                          
+                          <div className="cat-barra-container">
+                            <div className="cat-barra-progresso" style={{ width: `${cat.porcentagem}%` }}></div>
+                          </div>
+                          
+                          <div className="cat-valores">
+                            <span className="cat-porcentagem">{cat.porcentagem}%</span>
+                            <span className="cat-valor-moeda">R$ {cat.valor}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
 
-        </div>
+      </div>
   );
 }

@@ -28,8 +28,8 @@ function Dashboard() {
             <Cabecalho userName={usuarioLogado?.nome} />
 
             <main className="cards-grid">
-              <CardPrevisao aoReceberResposta={setDadosDaPrevisao}/>
-              <CardResumo dadosResultado={dadosDaPrevisao}/>
+                <CardPrevisao aoReceberResposta={setDadosDaPrevisao}/>
+                <CardResumo dadosResultado={dadosDaPrevisao}/>
             </main>
           </div>
         </div>
