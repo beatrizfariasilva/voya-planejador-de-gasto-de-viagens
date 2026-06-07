@@ -4,16 +4,19 @@ import Cabecalho from "../../components/Cabecalho/Cabecalho";
 import CardPrevisao from "../../components/CardPrevisao/CardPrevisao";
 import CardResumo from "../../components/CardResumo/CardResumo";
 import Footer from "../../components/Footer/Footer";
-import { ChevronUp } from 'lucide-react';
 import ProtectedRoute from "@/components/ProtectedRoute";
 import React from 'react';
 import './Dashboard.css';
 import { useAuthStore } from "../../store/authStore";
+import { useState } from 'react';
 
 function Dashboard() {
   const usuarioLogado = useAuthStore(
     (state) => state.usuario
   );
+
+  const [dadosDaPrevisao, setDadosDaPrevisao]=useState(null);
+
   return (
     <ProtectedRoute>
       <div className="dashboard-page">
@@ -25,8 +28,8 @@ function Dashboard() {
             <Cabecalho userName={usuarioLogado?.nome} />
 
             <main className="cards-grid">
-              <CardPrevisao />
-              <CardResumo />
+              <CardPrevisao aoReceberResposta={setDadosDaPrevisao}/>
+              <CardResumo dadosResultado={dadosDaPrevisao}/>
             </main>
           </div>
         </div>

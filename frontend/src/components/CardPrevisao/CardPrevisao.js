@@ -1,18 +1,20 @@
 'use client';
 import React, { useState } from 'react';
 import { PlaneTakeoff, MapPin, Calendar, Users, Briefcase, ArrowRight, Home, Utensils, Camera, Wine, Backpack, Luggage , Gem } from 'lucide-react';
+import { useAuthStore } from "../../store/authStore"; 
 import './CardPrevisao.css';
 
-export default function CardPrevisao() {
-    const [destino, setDestino] = useState('Recife, PE');
-    const [dias, setDias] = useState(5);
-    const [pessoas, setPessoas] = useState(2);
-    const [estilo, setEstilo] = useState(2);
+export default function CardPrevisao({ aoReceberResposta }) {
+  const usuarioLogado = useAuthStore((state) => state.usuario);
+  const [destino, setDestino]=useState('Recife, PE');
+  const [dias, setDias]=useState(1);
+  const [pessoas, setPessoas]=useState(1);
+  const [estilo, setEstilo]=useState(1);
 
-    const [hospedagem, setHospedagem] = useState(2);
-    const [alimentacao, setAlimentacao] = useState(3);
-    const [passeios, setPasseios] = useState(1);
-    const [vidaNoturna, setVidaNoturna] = useState(2);
+  const [hospedagem, setHospedagem]=useState(1);
+  const [alimentacao, setAlimentacao]=useState(1);
+  const [passeios, setPasseios]=useState(1);
+  const [vidaNoturna, setVidaNoturna]=useState(1);
 
   const alterarContador = (tipo, operacao) => {
     if (tipo === 'dias') {
@@ -22,7 +24,7 @@ export default function CardPrevisao() {
     }
   };
 
-    const lidarComEnvio = (e) => {
+  const lidarComEnvio = (e) => {
         e.preventDefault();
         const dadosParaBackend = { 
             destino, 
@@ -35,8 +37,50 @@ export default function CardPrevisao() {
             alimentacao
         };
     
-        console.log("JSON pronto para a IA:", dadosParaBackend);
+        console.log("JSON com destino:", dadosParaBackend);
   };
+
+  const calcularEstimativa=async()=> {
+    const json ={
+      destino: destino,
+      dias: dias,
+      pessoas: pessoas,
+      hospedagem: hospedagem,
+      passeios: passeios,
+      vidaNoturna: vidaNoturna,
+      alimentacao: alimentacao
+    };
+    
+    try {
+      const response = await fetch(`http://localhost:8080/api/usuarios/${usuarioLogado.id}/viagens/prever`, {
+        method:'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(json),
+      });
+
+      if (response.ok) {
+        const resultado=await response.json();
+        console.log("Recebido pelo java", resultado);
+        aoReceberResposta({
+          valorTotal: resultado.previsao,
+          escolhas: {
+            pessoas: pessoas,
+            hospedagem: hospedagem,
+            alimentacao: alimentacao,
+            passeios: passeios,
+            vidaNoturna: vidaNoturna,
+            dias: dias,
+          }
+        });
+      }
+    } catch (error) {
+        console.error("Erro ao conectar com Java: ", error);
+    }
+};
+
+
+
+
 
   return (
     <div className="card-previsao">
@@ -183,7 +227,7 @@ export default function CardPrevisao() {
           </div>
         </div>
 
-        <button type="submit" className="btn-calcular">
+        <button onClick={calcularEstimativa} className="btn-calcular">
           Calcular estimativa
           <ArrowRight size={18} />
         </button>

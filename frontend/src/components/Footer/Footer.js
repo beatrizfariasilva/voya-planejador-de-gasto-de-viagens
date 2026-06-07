@@ -2,14 +2,21 @@
 import React from 'react';
 import {ChevronUp} from 'lucide-react';
 import './Footer.css';
+import { useRouter } from 'next/navigation';
 import { useAuthStore } from "../../store/authStore";
 
 function Footer() {
-
+    const router = useRouter();
+    const logout = useAuthStore((state) => state.logout);
     const usuario = useAuthStore((state) => state.usuario)?.nome || "Usuario";
 
     const inicial = usuario ? usuario.charAt(0) : 'U';
     const [menuAberto, setMenuAberto] = React.useState(false);
+
+    const sair = () => {
+        logout(); 
+        router.push('/login'); 
+    };
 
     return (
         <div className="dashboard-footer">
@@ -25,12 +32,12 @@ function Footer() {
             <div className="footer-usuario-container" onClick={() => setMenuAberto(!menuAberto)}>
 
                 {menuAberto && (
-                    <div className="footer-menu">
+                    <div className="footer-menu" onClick={() => router.push('/')}>
                     <button className="footer-menu-item">
                         Editar perfil
                     </button>
 
-                    <button className="footer-menu-item">
+                    <button className="footer-menu-item" onClick={sair}>
                         Sair
                     </button>
                     </div>

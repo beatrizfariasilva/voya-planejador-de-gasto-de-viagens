@@ -5,6 +5,7 @@ import org.springframework.web.client.RestClient;
 
 import com.voya.dto.PrevisaoRequestDTO;
 import com.voya.dto.PrevisaoResponseDTO;
+import com.voya.dto.RequisicaoML;
 import com.voya.model.Viagem;
 import com.voya.service.ViagemService;
 
@@ -54,13 +55,31 @@ public class ViagemController {
     }
 
     private final RestClient restClient=RestClient.create("http://localhost:8000");
-    @PostMapping("/{viagemId}/prever")
-    public PrevisaoResponseDTO obterPrevisao(@PathVariable UUID usuarioId, @PathVariable UUID viagemId, @RequestBody PrevisaoRequestDTO dados) {
-        Viagem viagem=viagemService.buscarPorId(viagemId);
-        PrevisaoResponseDTO resposta= restClient.post().uri("/prever").body(dados).retrieve().body(PrevisaoResponseDTO.class);
+    @PostMapping("/prever")
+    public PrevisaoResponseDTO obterPrevisao(@PathVariable UUID usuarioId, @RequestBody PrevisaoRequestDTO dados) {
+        RequisicaoML atributos=new RequisicaoML(
+            dados.dias(),
+            dados.pessoas(),
+            dados.hospedagem(),
+            dados.alimentacao(),
+            dados.passeios(),
+            dados.vidaNoturna()
+        );
+        
+        PrevisaoResponseDTO resposta= restClient.post().uri("/prever").body(atributos).retrieve().body(PrevisaoResponseDTO.class);
+
+
+        Viagem viagem=new Viagem();
+        viagem.setDestino(dados.destino());
+        viagem.setDias(dados.dias());
+        viagem.setPessoas(dados.pessoas());
+        viagem.setHospedagem(dados.hospedagem());
+        viagem.setVidaNoturna(dados.vidaNoturna());
+        viagem.setAlimentacao(dados.alimentacao());
         viagem.setCustoEstimado(resposta.previsao());
         viagemService.salvarViagem(viagem, usuarioId);
         return resposta;
     }
 
 }
+

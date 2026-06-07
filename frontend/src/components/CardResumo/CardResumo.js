@@ -1,73 +1,80 @@
 'use client';
 import React from 'react';
-import { DollarSign, Home, Utensils, Camera, Wine, Car, BookmarkCheck, ChevronRight } from 'lucide-react';
+import { DollarSign, Home, Utensils, Camera, Wine, BookmarkCheck, Calendar, Users } from 'lucide-react';
 import './CardResumo.css';
 
 export default function CardResumo({ dadosResultado }) {
-  const custoTotal = dadosResultado?.custoTotal || 4850;
-  const faixaMin = dadosResultado?.faixaMin || 4200;
-  const faixaMax = dadosResultado?.faixaMax || 5600;
-  
-  const categorias = dadosResultado?.categorias || [
-    { nome: 'Hospedagem', porcentagem: 41, valor: 2000, icone: <Home size={16} /> },
-    { nome: 'Passeios', porcentagem: 19, valor: 900, icone: <Camera size={16} /> },
-    { nome: 'Alimentação', porcentagem: 15, valor: 750, icone: <Utensils size={16} /> },
-    { nome: 'Vida noturna', porcentagem: 12, valor: 600, icone: <Wine size={16} /> },
-    { nome: 'Transporte', porcentagem: 8, valor: 400, icone: <Car size={16} /> },
-  ];
+    const valorTotal = dadosResultado?.valorTotal
+    const escolhas = dadosResultado?.escolhas
+    const custoPorDia = valorTotal / escolhas.dias;
+    const custoPorPessoa = valorTotal / escolhas.pessoas;
 
-  const lidarComSalvar = () => {
-    console.log("qq coisa");
-  };
+    const pesosBase = { hospedagem: 14, passeios: 7, alimentacao: 5, vidaNoturna: 4 };
+    const pontosHosp = escolhas.hospedagem * pesosBase.hospedagem;
+    const pontosPass = escolhas.passeios * pesosBase.passeios;
+    const pontosAlim = escolhas.alimentacao * pesosBase.alimentacao;
+    const pontosVida = escolhas.vidaNoturna * pesosBase.vidaNoturna;
 
-  return (
-    <div className="card-resumo">
-      <div className="resumo-topo">
-        <div className="badge-custo">
-          <DollarSign size={14} />
-          <span>CUSTO TOTAL ESTIMADO</span>
-        </div>
-        
-        <h1 className="valor-total">R$ {custoTotal.toLocaleString('pt-BR')}</h1>
-        
-        <div className="faixa-preco">
-          <BookmarkCheck size={16} />
-          <span>Faixa de preço: R$ {faixaMin.toLocaleString('pt-BR')} - R$ {faixaMax.toLocaleString('pt-BR')}</span>
-        </div>
-      </div>
+    const totalPontos = pontosHosp + pontosPass + pontosAlim + pontosVida;
 
-      <div className="resumo-categorias">
-        <h3>Gasto por categoria</h3>
-        
-        <div className="lista-categorias">
-          {categorias.map((cat, index) => (
-            <div key={index} className="linha-categoria">
-              <div className="cat-info-esquerda">
-                <span className="cat-icone">{cat.icone}</span>
-                <span className="cat-nome">{cat.nome}</span>
-              </div>
-              
-              <div className="cat-barra-container">
-                <div className="cat-barra-progresso" style={{ width: `${cat.porcentagem}%` }}></div>
-              </div>
-              
-              <div className="cat-valores">
-                <span className="cat-porcentagem">{cat.porcentagem}%</span>
-                <span className="cat-valor-moeda">R$ {cat.valor}</span>
-              </div>
+    const categorias = [
+        { nome: 'Hospedagem', porcentagem: Math.round((pontosHosp / totalPontos) * 100), valor: (pontosHosp / totalPontos) * valorTotal, icone: <Home size={16} /> },
+        { nome: 'Passeios', porcentagem: Math.round((pontosPass / totalPontos) * 100), valor: (pontosPass / totalPontos) * valorTotal, icone: <Camera size={16} /> },
+        { nome: 'Alimentação', porcentagem: Math.round((pontosAlim / totalPontos) * 100), valor: (pontosAlim / totalPontos) * valorTotal, icone: <Utensils size={16} /> },
+        { nome: 'Vida noturna', porcentagem: Math.round((pontosVida / totalPontos) * 100), valor: (pontosVida / totalPontos) * valorTotal, icone: <Wine size={16} /> }
+    ];
+
+    return (
+        <div className="card-resumo">
+            <div className="resumo-topo">
+                <div className="badge-custo">
+                    <DollarSign size={14} /> <span>CUSTO TOTAL ESTIMADO</span>
+                </div>
+                
+                <h1>{valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</h1>
+
+                <div className="faixa-preco">
+                    <BookmarkCheck size={14} />
+                    <span>Faixa de preço: {(valorTotal * 0.85).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} - {(valorTotal * 1.15).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                </div>
+
+
+                <div className="metricas-principais">
+                    <div className="metrica-box">
+                        <Calendar size={18} className="icon-metrica" />
+                        <div className="metrica-texto">
+                            <span>Por dia</span>
+                            <strong>{custoPorDia.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong>
+                        </div>
+                    </div>
+                    <div className="metrica-box">
+                        <Users size={18} className="icon-metrica" />
+                        <div className="metrica-texto">
+                            <span>Por pessoa</span>
+                            <strong>{custoPorPessoa.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong>
+                        </div>
+                    </div>
+                </div>
             </div>
-          ))}
+
+            <div className="resumo-corpo">
+                <h3>Gasto por categoria</h3>
+                <div className="lista-categorias">
+                    {categorias.map((cat, index) => (
+                        <div key={index} className="categoria-item">
+                            <div className="cat-info">
+                                {cat.icone}
+                                <span>{cat.nome}</span>
+                            </div>
+                            <div className="cat-barra-container">
+                                <div className="cat-barra-progresso" style={{ width: `${cat.porcentagem}%` }}></div>
+                            </div>
+                            <span className="cat-porcentagem">{cat.porcentagem}%</span>
+                            <span className="cat-valor">{cat.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
-      </div>
-
-      <div className="resumo-rodape">
-
-        <button onClick={lidarComSalvar} className="btn-salvar-previsao">
-          <BookmarkCheck size={18} />
-          <span>Salvar esta previsão</span>
-        </button>
-      </div>
-
-    </div>
-  );
+    );
 }
