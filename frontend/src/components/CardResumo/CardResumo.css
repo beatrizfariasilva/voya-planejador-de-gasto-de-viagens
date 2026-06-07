@@ -192,14 +192,44 @@
   background: rgba(12, 120, 125, 0.04);
 }
 
+.metrica-box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f8fbfb; 
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.icon-metrica {
+    color: #008080; 
+}
+
+.metrica-texto {
+    display: flex;
+    flex-direction: column;
+}
+
+.metrica-texto span {
+    font-size: 0.75rem;
+    color: #666;
+    text-transform: uppercase;
+}
+
+.metrica-texto strong {
+    font-size: 1rem;
+    color: #1a1a1a;
+}
+
 .metricas-principais {
     display: flex;
     justify-content: space-between;
     gap: 15px;
     margin-top: 20px;
     padding-top: 15px;
-    border-top: 1px solid rgba(0,0,0,0.05);
-} 
+    border-top: 1px solid rgba(0,0,0,0.05); 
+}
 
 .metrica-box {
     flex: 1;
@@ -229,4 +259,11 @@
 .metrica-texto strong {
     font-size: 1rem;
     color: #1a1a1a;
+}
+
+.cat-valor {
+    font-weight: 600;
+    font-size: 0.85rem;
+    min-width: 90px;
+    text-align: right;
 }
