@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Footer from "../../components/Footer/Footer";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import { MapPin, Calendar, Users, Trash2, Edit3, Search } from 'lucide-react';
+import { MapPin, Trash2, Edit3, Search } from 'lucide-react';
 import { useAuthStore } from "../../store/authStore";
 import './Historico.css';
 
@@ -11,6 +11,8 @@ export default function Historico() {
     const [viagens, setViagens] = useState([]);
     const [busca, setBusca] = useState('');
     const usuarioLogado = useAuthStore((state) => state.usuario);
+    const [viagemParaEditar, setViagemParaEditar] = useState(null);
+    const [isModalAberto, setIsModalAberto] = useState(false);
 
 
     useEffect(() => {
@@ -44,8 +46,31 @@ export default function Historico() {
     };
 
     const viagensFiltradas = viagens.filter(v => 
-    v.destino.toLowerCase().includes(busca.toLowerCase())
-);
+        v.destino.toLowerCase().includes(busca.toLowerCase())
+    );
+
+    const prepararEdicao = (viagem) => {
+        setViagemParaEditar({ ...viagem }); 
+        setIsModalAberto(true);             
+    };
+
+    const salvarEdicao = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`http://localhost:8080/api/usuarios/${usuarioLogado.id}/viagens/${viagemParaEditar.id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(viagemParaEditar)
+            });
+
+            if (response.ok) {
+                setViagens(viagens.map(v => v.id === viagemParaEditar.id ? viagemParaEditar : v));
+                setIsModalAberto(false);
+            }
+        } catch (error) {
+            console.error("Erro ao atualizar viagem:", error);
+        }
+    };
 
     return (
         <ProtectedRoute>
@@ -83,16 +108,33 @@ export default function Historico() {
                                             </div>
                                             <div className="viagem-acoes">
                                                 <button className="btn-acao delete" onClick={() => excluirViagem(v.id)}><Trash2 size={18} /></button>
+                                                <button className="btn-acao edit" onClick={() => prepararEdicao(v)}><Edit3 size={18} /></button>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
                             </div>
                         </main>
-
-                        <Footer />
                     </div>
                 </div>
+                <Footer />
+                {isModalAberto && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h3>Editar destino</h3>
+                        <input 
+                            type="text" 
+                            value={viagemParaEditar.destino}
+                            onChange={(e) => setViagemParaEditar({...viagemParaEditar, destino: e.target.value})}
+                            className="input-edicao-destino" 
+                        />
+                        <div className="modal-actions">
+                            <button onClick={() => setIsModalAberto(false)} className="btn-save">Cancelar</button>
+                            <button onClick={salvarEdicao} className="btn-save">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
             </div>
         </ProtectedRoute>
     );

@@ -135,8 +135,8 @@
 
 .dashboard-container {
     display: flex;
-    height: 100vh;
-    overflow: hidden; 
+    flex: 1;
+    overflow: hidden;
 }
 
 .main-content {
@@ -147,13 +147,13 @@
 }
 
 .sidebar {
-    width: 260px;
-    flex-shrink: 0; 
+    width: 260px; 
 }
 
 footer {
     flex-shrink: 0;
     background: white;
+    height: 60px;
 }
 
 .input-edicao-destino{
@@ -162,4 +162,54 @@ footer {
     outline: none; 
     font-size: 1.1rem; 
     font-weight: 600
+}
+
+.dashboard-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 24px;
+    border-radius: 16px;
+    width: 400px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.input-edicao-destino {
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    border-bottom: 1px solid #008080;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px; 
+    margin-top: 20px;
+}
+
+.btn-save {
+    background-color: #008080;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
 }
