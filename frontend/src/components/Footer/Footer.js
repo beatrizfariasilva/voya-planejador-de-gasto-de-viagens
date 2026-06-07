@@ -32,7 +32,7 @@ function Footer() {
             <div className="footer-usuario-container" onClick={() => setMenuAberto(!menuAberto)}>
 
                 {menuAberto && (
-                    <div className="footer-menu" onClick={() => router.push('/')}>
+                    <div className="footer-menu" onClick={() => router.push('/dashboard/perfil')}>
                     <button className="footer-menu-item">
                         Editar perfil
                     </button>

@@ -1,0 +1,148 @@
+.perfil-scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px 40px 100px 40px;
+    padding-left: 60px;
+}
+
+.perfil-header {
+    margin-bottom: 30px;
+}
+
+.perfil-header h2 {
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: #1a1a1a;
+    margin-bottom: 5px;
+}
+
+.perfil-card {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    max-width: 95%;
+    max-width: 2000px;
+}
+
+.avatar-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.avatar-placeholder {
+    width: 80px;
+    height: 80px;
+    background: #E6F4F4;
+    color: #0C787D;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    position: relative;
+}
+
+.form-grid {
+    display: grid;
+    gap: 24px;
+}
+
+.input-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #344054;
+    margin-bottom: 8px;
+}
+
+.input-group input, .input-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #EAECF0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.input-group input:focus {
+    border-color: #008080;
+    outline: none;
+}
+
+.btn-salvar-perfil {
+    background-color: #008080;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.dashboard-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.dashboard-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.danger-zone {
+    margin-top: 40px;
+    padding-top: 20px;
+}
+
+.danger-zone hr {
+    border: 0;
+    border-top: 1px solid #f0f0f0;
+    margin-bottom: 25px;
+}
+
+.danger-zone h4 {
+    color: #ff4d4d; 
+    margin-bottom: 8px;
+}
+
+.danger-zone p {
+    font-size: 0.85rem;
+    color: #667085;
+    margin-bottom: 16px;
+}
+
+.btn-excluir-conta {
+    background: transparent;
+    color: #ff4d4d;
+    border: 1px solid #ff4d4d;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-excluir-conta:hover {
+    background: #fff0f0; 
+}

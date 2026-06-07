@@ -24,6 +24,6 @@ public class Usuario {
     private String senha;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "usuario", cascade=CascadeType.ALL, orphanRemoval=true)
         private List<Viagem> viagens;
 }

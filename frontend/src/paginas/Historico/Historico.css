@@ -1,5 +1,5 @@
 .historico-container {
-    max-width: 1100px;
+    max-width: 2000px;
     margin: 0;
     padding-left: 20px;
 }
@@ -20,7 +20,7 @@
 .historico-scroll-area {
     flex: 1; 
     overflow-y: auto; 
-    padding: 32px;
+    padding: 40px 40px 100px 40px;
 }
 
 .busca-container {
@@ -144,6 +144,7 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
+    max-width: 100%;
 }
 
 .sidebar {
@@ -213,3 +214,4 @@ footer {
     border: none;
     cursor: pointer;
 }
+
