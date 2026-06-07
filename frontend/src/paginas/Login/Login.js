@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { login } from "../../services/authService";
 import "./Login.css";
 import { useAuthStore } from "../../store/authStore";
+import Avioes from "../../components/Avioes/Avioes";
 
 function Login() {
   const router = useRouter();
@@ -40,30 +41,15 @@ function Login() {
 
   return (
     <div className="login-container">
-      <div
-        className="login-sidebar"
-        style={{
-          backgroundImage: "url('praia.png')",
-        }}
-      >
-        <div className="containte-logo">
-          <img
-            src="logo.png"
-            alt="Voya"
-            className="logo"
-          />
-        </div>
-
-        <div className="sidebar-card">
-          <h2>Explore o mundo</h2>
-          <p>
-            Planeje viagens incríveis com noção de custos.
-          </p>
-        </div>
-      </div>
-
       <div className="login-content">
+        <Avioes />
         <div className="login-card">
+          <div className="login-logo">
+            <img
+              src="/logoCortada.png"
+              alt="Voya"
+            />
+          </div>
           <h1>Bem-vindo de volta</h1>
 
           <p className="subtitle">

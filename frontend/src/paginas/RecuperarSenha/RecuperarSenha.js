@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { recuperarSenha,validarEmail } from "../../services/recuperarSenhaService";
+import { recuperarSenha, validarEmail } from "../../services/recuperarSenhaService";
 import "../Login/Login.css";
+import Avioes from "../../components/Avioes/Avioes";
 
 function RecuperarSenha() {
   const router = useRouter();
@@ -42,30 +43,16 @@ function RecuperarSenha() {
 
   return (
     <div className="login-container">
-      <div
-        className="login-sidebar"
-        style={{
-          backgroundImage: "url('praia.png')",
-        }}
-      >
-        <div className="containte-logo">
-          <img
-            src="logo.png"
-            alt="Voya"
-            className="logo"
-          />
-        </div>
-
-        <div className="sidebar-card">
-          <h2>Explore o mundo</h2>
-          <p>
-            Planeje viagens incríveis com noção de custos.
-          </p>
-        </div>
-      </div>
-
       <div className="login-content">
+        <Avioes />
         <div className="login-card">
+          <div className="login-logo">
+            <img
+              src="logoCortada.png"
+              alt="Voya"
+              className="logo"
+            />
+          </div>
           <h1>Recuperar senha</h1>
 
           <p className="subtitle">
