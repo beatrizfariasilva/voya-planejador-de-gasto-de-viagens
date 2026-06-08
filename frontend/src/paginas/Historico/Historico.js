@@ -8,6 +8,7 @@ import { useAuthStore } from "../../store/authStore";
 import './Historico.css';
 import { Alert } from "../../components/Alertas/Alertas";
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { API_URL } from "@/services/api";
 
 export default function Historico() {
     const [busca, setBusca] = useState('');
@@ -19,7 +20,7 @@ export default function Historico() {
     const { data: viagens = [] } = useQuery({
         queryKey: ['historicoViagens', usuarioLogado?.id],
         queryFn: async () => {
-            const response = await fetch(`http://localhost:8080/api/usuarios/${usuarioLogado.id}/viagens`);
+            const response = await fetch(`${API_URL}/api/usuarios/${usuarioLogado.id}/viagens`);
             if (!response.ok) throw new Error("Erro ao buscar histórico");
             return response.json();
         },
@@ -28,7 +29,7 @@ export default function Historico() {
 
     const deleteMutation = useMutation({
         mutationFn: async (id) => {
-            const response = await fetch(`http://localhost:8080/api/usuarios/${usuarioLogado.id}/viagens/${id}`, {
+            const response = await fetch(`${API_URL}/api/usuarios/${usuarioLogado.id}/viagens/${id}`, {
                 method: 'DELETE'
             });
             if (!response.ok) throw new Error("Erro ao deletar");
@@ -46,7 +47,7 @@ export default function Historico() {
 
     const updateMutation = useMutation({
         mutationFn: async (viagemEditada) => {
-            const response = await fetch(`http://localhost:8080/api/usuarios/${usuarioLogado.id}/viagens/${viagemEditada.id}`, {
+            const response = await fetch(`${API_URL}/api/usuarios/${usuarioLogado.id}/viagens/${viagemEditada.id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(viagemEditada)

@@ -4,6 +4,7 @@ import { PlaneTakeoff, MapPin, Calendar, Users, Briefcase, ArrowRight, Home, Ute
 import { useAuthStore } from "../../store/authStore";
 import './CardPrevisao.css';
 import { useMutation } from "@tanstack/react-query";
+import { API_URL } from "@/services/api";
 
 export default function CardPrevisao({ aoReceberResposta }) {
   const usuarioLogado = useAuthStore((state) => state.usuario);
@@ -20,7 +21,7 @@ export default function CardPrevisao({ aoReceberResposta }) {
   const previsaoMutation = useMutation({
     mutationFn: async (json) => {
       const response = await fetch(
-        `http://localhost:8080/api/usuarios/${usuarioLogado.id}/viagens/prever`,
+        `${API_URL}/api/usuarios/${usuarioLogado.id}/viagens/prever`,
         {
           method: "POST",
           headers: {

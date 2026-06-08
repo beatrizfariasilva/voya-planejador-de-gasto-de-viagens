@@ -12,6 +12,7 @@ import com.voya.service.ViagemService;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +30,7 @@ public class ViagemController {
     private ViagemService viagemService;
 
     @PostMapping
-    public Viagem criarViagem(@RequestBody Viagem viagem, @PathVariable UUID usuarioId){
+    public Viagem criarViagem(@RequestBody Viagem viagem, @PathVariable UUID usuarioId) {
         return viagemService.salvarViagem(viagem, usuarioId);
     }
 
@@ -44,7 +45,8 @@ public class ViagemController {
     }
 
     @PatchMapping("/{viagemId}")
-    public ResponseEntity<Viagem> atualizarViagem(@PathVariable UUID usuarioId, @PathVariable UUID viagemId, @RequestBody Viagem viagem) {
+    public ResponseEntity<Viagem> atualizarViagem(@PathVariable UUID usuarioId, @PathVariable UUID viagemId,
+            @RequestBody Viagem viagem) {
         return ResponseEntity.ok(viagemService.atualizarViagem(viagemId, viagem));
     }
 
@@ -54,22 +56,24 @@ public class ViagemController {
         return ResponseEntity.noContent().build();
     }
 
-    private final RestClient restClient=RestClient.create("http://localhost:8000");
+    @Value("${ml.api.url}")
+    private String mlApiUrl;
+
     @PostMapping("/prever")
     public PrevisaoResponseDTO obterPrevisao(@PathVariable UUID usuarioId, @RequestBody PrevisaoRequestDTO dados) {
-        RequisicaoML atributos=new RequisicaoML(
-            dados.dias(),
-            dados.pessoas(),
-            dados.hospedagem(),
-            dados.alimentacao(),
-            dados.passeios(),
-            dados.vidaNoturna()
-        );
-        
-        PrevisaoResponseDTO resposta= restClient.post().uri("/prever").body(atributos).retrieve().body(PrevisaoResponseDTO.class);
+        RestClient restClient = RestClient.create(mlApiUrl);
+        RequisicaoML atributos = new RequisicaoML(
+                dados.dias(),
+                dados.pessoas(),
+                dados.hospedagem(),
+                dados.alimentacao(),
+                dados.passeios(),
+                dados.vidaNoturna());
 
+        PrevisaoResponseDTO resposta = restClient.post().uri("/prever").body(atributos).retrieve()
+                .body(PrevisaoResponseDTO.class);
 
-        Viagem viagem=new Viagem();
+        Viagem viagem = new Viagem();
         viagem.setDestino(dados.destino());
         viagem.setDias(dados.dias());
         viagem.setPessoas(dados.pessoas());
@@ -82,4 +86,3 @@ public class ViagemController {
     }
 
 }
-

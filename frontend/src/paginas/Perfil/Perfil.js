@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import './Perfil.css';
 import { Alert } from "../../components/Alertas/Alertas";
 import { useMutation } from '@tanstack/react-query';
+import { API_URL } from "@/services/api";
 
 export default function Perfil() {
     const usuarioLogado = useAuthStore((state) => state.usuario);
@@ -29,7 +30,7 @@ export default function Perfil() {
 
     const updateMutation = useMutation({
         mutationFn: async (dados) => {
-            const response = await fetch(`http://localhost:8080/api/usuarios/atualizar/${usuarioLogado.id}`, {
+            const response = await fetch(`${API_URL}/api/usuarios/atualizar/${usuarioLogado.id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dados)
@@ -55,7 +56,7 @@ export default function Perfil() {
     });
     const deleteMutation = useMutation({
         mutationFn: async () => {
-            const response = await fetch(`http://localhost:8080/api/usuarios/deletar/${usuarioLogado.id}`, {
+            const response = await fetch(`${API_URL}/api/usuarios/deletar/${usuarioLogado.id}`, {
                 method: 'DELETE',
             });
             if (!response.ok) throw new Error("Erro ao deletar");
