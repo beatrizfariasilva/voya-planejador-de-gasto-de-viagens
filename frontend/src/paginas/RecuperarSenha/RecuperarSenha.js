@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { recuperarSenha, validarEmail } from "../../services/recuperarSenhaService";
+import { useMutation } from "@tanstack/react-query";
+import {
+  recuperarSenha,
+  validarEmail,
+} from "../../services/recuperarSenhaService";
 import "../Login/Login.css";
 import Avioes from "../../components/Avioes/Avioes";
 import { Alert } from "../../components/Alertas/Alertas";
@@ -14,38 +18,52 @@ function RecuperarSenha() {
   const [novaSenha, setNovaSenha] = useState("");
   const [emailValidado, setEmailValidado] = useState(false);
 
-  async function handleValidarEmail() {
-    try {
-      await validarEmail(email);
+  const validarEmailMutation = useMutation({
+    mutationFn: (email) => validarEmail(email),
 
+    onSuccess: () => {
       setEmailValidado(true);
 
       Alert.success(
         "Conta encontrada!",
         "Tudo certo! Agora defina uma nova senha para acessar sua conta."
       );
+    },
 
-    } catch (error) {
-      alert(error.message);
-    }
-  }
+    onError: (error) => {
+      Alert.error(error.message);
+    },
+  });
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  const recuperarSenhaMutation = useMutation({
+    mutationFn: ({ email, novaSenha }) =>
+      recuperarSenha(email, novaSenha),
 
-    try {
-      await recuperarSenha(email, novaSenha);
-
+    onSuccess: () => {
       Alert.success(
         "Senha atualizada!",
         "Sua nova senha foi salva com sucesso. Faça login para continuar."
       );
 
       router.push("/login");
+    },
 
-    } catch (error) {
+    onError: (error) => {
       Alert.error(error.message);
-    }
+    },
+  });
+
+  function handleValidarEmail() {
+    validarEmailMutation.mutate(email);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    recuperarSenhaMutation.mutate({
+      email,
+      novaSenha,
+    });
   }
 
   return (
@@ -74,9 +92,7 @@ function RecuperarSenha() {
                 type="email"
                 placeholder="email@exemplo.com"
                 value={email}
-                onChange={(e) =>
-                  setEmail(e.target.value)
-                }
+                onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={emailValidado}
               />
@@ -86,8 +102,11 @@ function RecuperarSenha() {
               <button
                 type="button"
                 onClick={handleValidarEmail}
+                disabled={validarEmailMutation.isPending}
               >
-                Verificar e-mail
+                {validarEmailMutation.isPending
+                  ? "Verificando..."
+                  : "Verificar e-mail"}
               </button>
             ) : (
               <>
@@ -105,8 +124,13 @@ function RecuperarSenha() {
                   />
                 </div>
 
-                <button type="submit">
-                  Alterar senha
+                <button
+                  type="submit"
+                  disabled={recuperarSenhaMutation.isPending}
+                >
+                  {recuperarSenhaMutation.isPending
+                    ? "Alterando..."
+                    : "Alterar senha"}
                 </button>
               </>
             )}

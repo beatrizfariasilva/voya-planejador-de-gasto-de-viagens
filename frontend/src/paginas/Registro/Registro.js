@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
 import { cadastrar } from "../../services/registroService";
 import "../Login/Login.css";
 import Avioes from "../../components/Avioes/Avioes";
+import { Alert } from "../../components/Alertas/Alertas";
 
 function Registro() {
   const router = useRouter();
@@ -13,27 +15,32 @@ function Registro() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  const cadastroMutation = useMutation({
+    mutationFn: (usuario) => cadastrar(usuario),
 
-    try {
-      const usuario = {
-        nome,
-        email,
-        senha,
-      };
-
-      const data = await cadastrar(usuario);
-
+    onSuccess: (data) => {
       console.log("Usuário criado:", data);
 
-      alert("Conta criada com sucesso!");
-
+      Alert.success(
+        "Conta criada com sucesso!",
+        "Agora você já pode acessar sua conta."
+      );
       router.push("/login");
+    },
 
-    } catch (error) {
+    onError: (error) => {
       alert(error.message);
-    }
+    },
+  });
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    cadastroMutation.mutate({
+      nome,
+      email,
+      senha,
+    });
   }
 
   return (
@@ -91,8 +98,13 @@ function Registro() {
               />
             </div>
 
-            <button type="submit">
-              Criar conta
+            <button
+              type="submit"
+              disabled={cadastroMutation.isPending}
+            >
+              {cadastroMutation.isPending
+                ? "Criando..."
+                : "Criar conta"}
             </button>
           </form>
 

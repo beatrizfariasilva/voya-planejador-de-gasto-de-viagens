@@ -1,21 +1,31 @@
-'use client'; 
-import React, { useState } from 'react'; 
-import Sidebar from "../../components/Sidebar/Sidebar"; 
-import Footer from "../../components/Footer/Footer"; 
-import ProtectedRoute from "@/components/ProtectedRoute"; 
-import { User, Mail, Save, Lock } from 'lucide-react'; 
-import { useAuthStore } from "../../store/authStore"; 
-import { useRouter } from 'next/navigation'; 
-import './Perfil.css'; 
+'use client';
+import React, { useEffect,useState } from 'react';
+import Sidebar from "../../components/Sidebar/Sidebar";
+import Footer from "../../components/Footer/Footer";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import { User, Mail, Save, Lock } from 'lucide-react';
+import { useAuthStore } from "../../store/authStore";
+import { useRouter } from 'next/navigation';
+import './Perfil.css';
 import { Alert } from "../../components/Alertas/Alertas";
 import { useMutation } from '@tanstack/react-query';
 
-export default function Perfil() { 
-    const usuarioLogado = useAuthStore((state) => state.usuario); 
-    const setUsuario = useAuthStore((state) => state.setUsuario); 
+export default function Perfil() {
+    const usuarioLogado = useAuthStore((state) => state.usuario);
+    const setUsuario = useAuthStore((state) => state.setUsuario);
     const [formData, setFormData] = useState({ nome: '', email: '', senha: '' });
     const logout = useAuthStore((state) => state.logout);
     const router = useRouter();
+
+    useEffect(() => {
+        if (usuarioLogado) {
+            setFormData({
+                nome: usuarioLogado.nome || '',
+                email: usuarioLogado.email || '',
+                senha: ''
+            });
+        }
+    }, [usuarioLogado]);
 
     const updateMutation = useMutation({
         mutationFn: async (dados) => {
@@ -24,13 +34,13 @@ export default function Perfil() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dados)
             });
-        if (!response.ok) throw new Error("Erro ao atualizar");
-        return response.json();
+            if (!response.ok) throw new Error("Erro ao atualizar");
+            return response.json();
         },
         onSuccess: (usuarioAtualizado) => {
             setUsuario(usuarioAtualizado);
             Alert.success(
-                "Perfil updated com sucesso!",
+                "Perfil atualizado com sucesso!",
                 "Suas informações foram salvas com êxito."
             );
             setFormData(prev => ({ ...prev, senha: '' }));
@@ -86,8 +96,8 @@ export default function Perfil() {
     };
 
     const handleExcluirConta = () => {
-        const confirmacao = window.confirm("Tem certeza que deseja excluir sua conta? Essa ação é irreversível.");
-        if (confirmacao) {
+        const confirmacao = Alert.confirm("Tem certeza que deseja excluir sua conta? Essa ação é irreversível.");
+        if (confirmacao.isConfirmed) {
             deleteMutation.mutate();
         }
     };
@@ -152,8 +162,8 @@ export default function Perfil() {
                                     </div>
 
                                     <div className="perfil-actions">
-                                        <button 
-                                            type="submit" 
+                                        <button
+                                            type="submit"
                                             className="btn-salvar-perfil"
                                             disabled={updateMutation.isPending}
                                         >
@@ -165,8 +175,8 @@ export default function Perfil() {
                                     <hr />
                                     <h4>Excluir conta</h4>
                                     <p>Ao excluir sua conta, todos os seus dados e histórico de viagens serão removidos permanentemente.</p>
-                                    <button 
-                                        className="btn-excluir-conta" 
+                                    <button
+                                        className="btn-excluir-conta"
                                         onClick={handleExcluirConta}
                                         disabled={deleteMutation.isPending}
                                     >

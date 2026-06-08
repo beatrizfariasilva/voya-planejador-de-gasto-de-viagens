@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
 import { login } from "../../services/authService";
 import "./Login.css";
 import { useAuthStore } from "../../store/authStore";
@@ -15,12 +16,10 @@ function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  const loginMutation = useMutation({
+    mutationFn: () => login(email, senha),
 
-    try {
-      const data = await login(email, senha);
-
+    onSuccess: (data) => {
       loginStore(
         {
           id: data.id,
@@ -29,11 +28,18 @@ function Login() {
         },
         data.token
       );
-      router.push("/dashboard");
 
-    } catch (error) {
+      router.push("/dashboard");
+    },
+
+    onError: (error) => {
       Alert.error(error.message);
-    }
+    },
+  });
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    loginMutation.mutate();
   }
 
   return (
@@ -82,8 +88,13 @@ function Login() {
               />
             </div>
 
-            <button type="submit">
-              Entrar
+            <button
+              type="submit"
+              disabled={loginMutation.isPending}
+            >
+              {loginMutation.isPending
+                ? "Entrando..."
+                : "Entrar"}
             </button>
           </form>
 
