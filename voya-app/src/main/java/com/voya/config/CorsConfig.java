@@ -12,7 +12,8 @@ public class CorsConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins(
                         "http://localhost:3000",
-                        "https://voya-planejador-de-gasto-de-viagens-1.onrender.com"
+                        "https://voya-planejador-de-gasto-de-viagens-1.onrender.com",
+                        "https://voya-planejador-de-gasto-de-viagens.vercel.app"
                 )
                 .allowedMethods("*")
                 .allowedHeaders("*");
