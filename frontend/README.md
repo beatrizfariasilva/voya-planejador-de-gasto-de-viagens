@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Voya Frontend
 
-## Getting Started
+Frontend da plataforma **Voya**, responsável pela interface do usuário e pela comunicação com os serviços de backend e inteligência artificial.
 
-First, run the development server:
+Desenvolvido utilizando **React**, **Next.js** e **JavaScript**, o sistema oferece uma experiência moderna, responsiva e intuitiva para o planejamento de viagens e consulta de previsões de custos.
+
+## Objetivo
+
+Fornecer uma interface moderna e responsiva para que os usuários possam:
+
+* Realizar autenticação.
+* Realizar predições de custos de viagem.
+* Consultar previsões geradas pelo sistema.
+* Visualizar o histórico de previsões.
+* Gerenciar e editar informações do perfil.
+
+
+## Funcionalidades
+
+### Autenticação
+
+* Login de usuários
+* Cadastro de conta
+* Recuperação de senha
+* Controle de sessão
+
+### Predição de Viagens
+
+* Cadastro de dados para predição
+* Consulta de previsões realizadas
+* Visualização de histórico
+
+### Histórico
+
+* Visualização de previsões de custos realizadas
+* Consulta de registros anteriores
+
+### Integração com IA
+
+* Envio de dados para previsão
+* Exibição dos resultados retornados pelo modelo de Machine Learning
+
+## Tecnologias Utilizadas
+
+* React
+* Next.js
+* JavaScript
+* Zustand
+* TanStack Query
+* CSS
+
+## Execução do Projeto
+
+### Instalar Dependências
+
+```bash
+npm install
+```
+
+### Executar em Desenvolvimento
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Gerar Build
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Executar em Produção
 
-## Learn More
+```bash
+npm start
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Contexto Acadêmico
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Este módulo foi desenvolvido para aplicação prática de conceitos relacionados a:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* React
+* Next.js
+* Consumo de APIs REST
+* Arquitetura Frontend
+* Desenvolvimento Web 
