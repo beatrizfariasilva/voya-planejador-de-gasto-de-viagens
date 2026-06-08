@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Footer from "../../components/Footer/Footer";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -7,29 +7,61 @@ import { MapPin, Trash2, Edit3, Search } from 'lucide-react';
 import { useAuthStore } from "../../store/authStore";
 import './Historico.css';
 import { Alert } from "../../components/Alertas/Alertas";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 export default function Historico() {
-    const [viagens, setViagens] = useState([]);
     const [busca, setBusca] = useState('');
     const usuarioLogado = useAuthStore((state) => state.usuario);
     const [viagemParaEditar, setViagemParaEditar] = useState(null);
     const [isModalAberto, setIsModalAberto] = useState(false);
+    
+    const queryClient = useQueryClient();
+    const { data: viagens = [] } = useQuery({
+        queryKey: ['historicoViagens', usuarioLogado?.id],
+        queryFn: async () => {
+            const response = await fetch(`http://localhost:8080/api/usuarios/${usuarioLogado.id}/viagens`);
+            if (!response.ok) throw new Error("Erro ao buscar histórico");
+            return response.json();
+        },
+        enabled: !!usuarioLogado?.id
+    });
 
+    const deleteMutation = useMutation({
+        mutationFn: async (id) => {
+            const response = await fetch(`http://localhost:8080/api/usuarios/${usuarioLogado.id}/viagens/${id}`, {
+                method: 'DELETE'
+            });
+            if (!response.ok) throw new Error("Erro ao deletar");
+            return id;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['historicoViagens', usuarioLogado?.id]);
+            Alert.success("Viagem excluída!", "A viagem foi removida com sucesso.");
+        },
+        onError: (error) => {
+            console.error(error);
+            Alert.error("Erro ao excluir viagem.", "Não foi possível concluir a operação.");
+        }
+    });
 
-    useEffect(() => {
-        const buscarHistorico = async () => {
-            try {
-                const response = await fetch(`http://localhost:8080/api/usuarios/${usuarioLogado.id}/viagens`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setViagens(data);
-                }
-            } catch (error) {
-                console.error("Erro ao buscar histórico:", error);
-            }
-        };
-        if (usuarioLogado?.id) buscarHistorico();
-    }, [usuarioLogado]);
+    const updateMutation = useMutation({
+        mutationFn: async (viagemEditada) => {
+            const response = await fetch(`http://localhost:8080/api/usuarios/${usuarioLogado.id}/viagens/${viagemEditada.id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(viagemEditada)
+            });
+            if (!response.ok) throw new Error("Erro ao atualizar");
+            return response.json();
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['historicoViagens', usuarioLogado?.id]);
+            setIsModalAberto(false);
+        },
+        onError: (error) => {
+            console.error("Erro ao atualizar viagem:", error);
+        }
+    });
 
     const excluirViagem = async (id) => {
         const result = await Alert.confirm(
@@ -37,53 +69,23 @@ export default function Historico() {
             "Esta ação não poderá ser desfeita."
         );
         if (result.isConfirmed) {
-            try {
-                const response = await fetch(`http://localhost:8080/api/usuarios/${usuarioLogado.id}/viagens/${id}`, {
-                    method: 'DELETE'
-                });
-                if (response.ok) {
-                    setViagens(viagens.filter(v => v.id !== id));
-                    Alert.success(
-                        "Viagem excluída!",
-                        "A viagem foi removida com sucesso."
-                    );
-                }
-            } catch (error) {
-                console.log(error);
-                Alert.error(
-                    "Erro ao excluir viagem.",
-                    "Não foi possível concluir a operação."
-                );
-            }
+            deleteMutation.mutate(id);
         }
     };
-
-    const viagensFiltradas = viagens.filter(v =>
-        v.destino.toLowerCase().includes(busca.toLowerCase())
-    );
 
     const prepararEdicao = (viagem) => {
         setViagemParaEditar({ ...viagem });
         setIsModalAberto(true);
     };
 
-    const salvarEdicao = async (e) => {
+    const salvarEdicao = (e) => {
         e.preventDefault();
-        try {
-            const response = await fetch(`http://localhost:8080/api/usuarios/${usuarioLogado.id}/viagens/${viagemParaEditar.id}`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(viagemParaEditar)
-            });
-
-            if (response.ok) {
-                setViagens(viagens.map(v => v.id === viagemParaEditar.id ? viagemParaEditar : v));
-                setIsModalAberto(false);
-            }
-        } catch (error) {
-            console.error("Erro ao atualizar viagem:", error);
-        }
+        updateMutation.mutate(viagemParaEditar);
     };
+
+    const viagensFiltradas = viagens.filter(v =>
+        v.destino.toLowerCase().includes(busca.toLowerCase())
+    );
 
     return (
         <ProtectedRoute>
