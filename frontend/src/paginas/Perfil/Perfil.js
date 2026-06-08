@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Footer from "../../components/Footer/Footer";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -62,8 +62,8 @@ export default function Perfil() {
             if (!response.ok) throw new Error("Erro ao deletar");
             return response;
         },
-        onSuccess: () => {
-            Alert.success(
+        onSuccess: async () => {
+            await Alert.success(
                 "Conta excluída com sucesso.",
                 "Sua conta foi removida. Esperamos poder recebê-la novamente no futuro."
             );
@@ -96,8 +96,8 @@ export default function Perfil() {
         updateMutation.mutate(formData);
     };
 
-    const handleExcluirConta = () => {
-        const confirmacao = Alert.confirm("Tem certeza que deseja excluir sua conta? Essa ação é irreversível.");
+    const handleExcluirConta = async () => {
+        const confirmacao = await Alert.confirm("Tem certeza que deseja excluir sua conta? Essa ação é irreversível.");
         if (confirmacao.isConfirmed) {
             deleteMutation.mutate();
         }
